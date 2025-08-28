@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Budget Planner</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --success-color: #27ae60;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --light-bg: #f8f9fa;
+        --dark-text: #2c3e50;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--light-bg);
+        color: var(--dark-text);
+      }
+
+      .navbar-custom {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        border-radius: 15px;
+        margin: 20px;
+        padding: 15px 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-item {
+        margin: 0 10px;
+      }
+
+      .nav-link {
+        color: white !important;
+        font-weight: 500;
+        padding: 12px 24px !important;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .main-container {
+        margin: 20px;
+        padding: 0;
+      }
+
+      .card-custom {
+        background: white;
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        margin-bottom: 30px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .card-custom:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+      }
+
+      .card-header-custom {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 25px 30px;
+        border-bottom: none;
+      }
+
+      .card-body-custom {
+        padding: 30px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      .form-label {
+        font-weight: 600;
+        color: var(--dark-text);
+        margin-bottom: 8px;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .form-control,
+      .form-select {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        background: white;
+      }
+
+      .btn-primary-custom {
+        background: linear-gradient(135deg, var(--secondary-color), #2980b9);
+        border: none;
+        border-radius: 12px;
+        padding: 15px 40px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+      }
+
+      .btn-primary-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        background: linear-gradient(135deg, #2980b9, var(--secondary-color));
+      }
+
+      .chart-container {
+        position: relative;
+        height: 300px;
+        margin: 20px 0;
+      }
+
+      .bar-chart {
+        display: flex;
+        align-items: end;
+        height: 200px;
+        gap: 15px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        margin: 20px 0;
+      }
+
+      .bar {
+        background: linear-gradient(to top, var(--secondary-color), #74b9ff);
+        border-radius: 8px 8px 0 0;
+        min-width: 40px;
+        flex: 1;
+        position: relative;
+        transition: all 0.3s ease;
+        animation: growUp 1s ease-out;
+      }
+
+      .bar:hover {
+        transform: scale(1.05);
+        background: linear-gradient(to top, var(--success-color), #55a3ff);
+      }
+
+      @keyframes growUp {
+        from {
+          height: 0;
+        }
+        to {
+          height: var(--height);
+        }
+      }
+
+      .pie-chart {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: conic-gradient(
+          var(--secondary-color) 0deg 120deg,
+          var(--success-color) 120deg 240deg,
+          var(--warning-color) 240deg 360deg
+        );
+        margin: 20px auto;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .pie-chart:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .pie-chart::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80px;
+        height: 80px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .table-responsive {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .table-custom {
+        margin: 0;
+        background: white;
+      }
+
+      .table-custom thead {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+      }
+
+      .table-custom thead th {
+        border: none;
+        padding: 20px 15px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .table-custom tbody tr {
+        transition: all 0.3s ease;
+      }
+
+      .table-custom tbody tr:hover {
+        background: rgba(52, 152, 219, 0.05);
+        transform: scale(1.01);
+      }
+
+      .table-custom td {
+        padding: 15px;
+        border-color: #f1f3f4;
+        vertical-align: middle;
+      }
+
+      .stats-card {
+        text-align: center;
+        padding: 20px;
+        border-radius: 15px;
+        background: white;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      }
+
+      .stats-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--secondary-color);
+        margin: 10px 0;
+      }
+
+      .stats-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      @media (max-width: 768px) {
+        .navbar-custom {
+          margin: 10px;
+          padding: 15px 20px;
+        }
+
+        .nav-link {
+          padding: 10px 15px !important;
+          font-size: 14px;
+        }
+
+        .main-container {
+          margin: 10px;
+        }
+
+        .card-body-custom {
+          padding: 20px 15px;
+        }
+
+        .stats-value {
+          font-size: 2rem;
+        }
+
+        .pie-chart {
+          width: 150px;
+          height: 150px;
+        }
+
+        .bar-chart {
+          height: 150px;
+          gap: 8px;
+          padding: 15px;
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.6s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .loading-spinner {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+      }
+
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid var(--secondary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+      <div class="container-fluid">
+        <ul
+          class="nav nav-pills flex-column flex-lg-row w-100 justify-content-center"
+        >
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="#"
+              onclick="showSection('budget-planner')"
+            >
+              <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              href="#"
+              onclick="showSection('budget-planner')"
+            >
+              <i class="fas fa-calculator me-2"></i>Budget Planner
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="#"
+              onclick="showSection('budget-planner')"
+            >
+              <i class="fas fa-chart-bar me-2"></i>Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="#"
+              onclick="showSection('budget-planner')"
+            >
+              <i class="fas fa-cog me-2"></i>Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container-fluid main-container">
+      <!-- Budget Planner Section -->
+      <div id="budget-planner" class="section fade-in">
+        <div class="row">
+          <!-- Input Form -->
+          <div class="col-lg-6 mb-4">
+            <div class="card card-custom">
+              <div class="card-header card-header-custom">
+                <h3 class="mb-0">
+                  <i class="fas fa-calculator me-2"></i>Budget Planner
+                </h3>
+              </div>
+              <div class="card-body card-body-custom">
+                <form id="budgetForm">
+                  <div class="form-group">
+                    <label for="projectCost" class="form-label"
+                      >Project Cost (₦)</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="projectCost"
+                      placeholder="Enter project cost in Naira"
+                      min="0"
+                      step="0.01"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="duration" class="form-label"
+                      >Duration (months)</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="duration"
+                      placeholder="Enter duration in months"
+                      min="1"
+                      step="1"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="interestRate" class="form-label"
+                      >Expected Interest Rate (%)</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="interestRate"
+                      placeholder="Enter interest rate"
+                      min="0"
+                      max="100"
+                      step="0.1"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="frequency" class="form-label"
+                      >Contribution Frequency</label
+                    >
+                    <select class="form-select" id="frequency">
+                      <option value="">Select frequency</option>
+                      <option value="monthly">Monthly</option>
+                      <option value="quarterly">Quarterly</option>
+                      <option value="semi-annually">Semi-Annually</option>
+                      <option value="annually">Annually</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="startDate" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="startDate" />
+                  </div>
+
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary-custom">
+                      <i class="fas fa-calculator me-2"></i>Calculate Sinking
+                      Fund
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts and Summary -->
+          <div class="col-lg-6 mb-4">
+            <div class="row">
+              <!-- Accumulated Fund Chart -->
+              <div class="col-12 mb-4">
+                <div class="card card-custom">
+                  <div class="card-body card-body-custom text-center">
+                    <h5 class="mb-3">Accumulated Fund Over Time</h5>
+                    <div class="bar-chart" id="barChart">
+                      <div class="bar" style="--height: 20%; height: 20%"></div>
+                      <div class="bar" style="--height: 40%; height: 40%"></div>
+                      <div class="bar" style="--height: 60%; height: 60%"></div>
+                      <div class="bar" style="--height: 80%; height: 80%"></div>
+                      <div
+                        class="bar"
+                        style="--height: 100%; height: 100%"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Budget Distribution -->
+              <div class="col-12 mb-4">
+                <div class="card card-custom">
+                  <div class="card-body card-body-custom text-center">
+                    <h5 class="mb-3">Budget Distribution</h5>
+                    <div class="pie-chart" id="pieChart"></div>
+                    <div class="mt-3">
+                      <div
+                        class="d-flex justify-content-center gap-3 flex-wrap"
+                      >
+                        <span
+                          ><i
+                            class="fas fa-circle"
+                            style="color: var(--secondary-color)"
+                          ></i>
+                          Principal</span
+                        >
+                        <span
+                          ><i
+                            class="fas fa-circle"
+                            style="color: var(--success-color)"
+                          ></i>
+                          Interest</span
+                        >
+                        <span
+                          ><i
+                            class="fas fa-circle"
+                            style="color: var(--warning-color)"
+                          ></i>
+                          Target</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" id="loadingSpinner">
+          <div class="spinner"></div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="row" id="resultsSection" style="display: none">
+          <div class="col-12">
+            <div class="card card-custom">
+              <div class="card-header card-header-custom">
+                <h4 class="mb-0">
+                  <i class="fas fa-table me-2"></i>Sinking Fund Schedule
+                </h4>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-custom mb-0">
+                    <thead>
+                      <tr>
+                        <th>Month</th>
+                        <th>Contribution</th>
+                        <th>Interest</th>
+                        <th>Balance</th>
+                      </tr>
+                    </thead>
+                    <tbody id="resultsTable">
+                      <!-- Results will be populated here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary Stats -->
+        <div class="row" id="summarySection" style="display: none">
+          <div class="col-md-3 mb-3">
+            <div class="stats-card">
+              <div class="stats-value" id="totalContribution">₦0</div>
+              <div class="stats-label">Total Contribution</div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="stats-card">
+              <div class="stats-value" id="totalInterest">₦0</div>
+              <div class="stats-label">Total Interest</div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="stats-card">
+              <div class="stats-value" id="monthlyContribution">₦0</div>
+              <div class="stats-label">Periodic Payment</div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="stats-card">
+              <div class="stats-value" id="finalBalance">₦0</div>
+              <div class="stats-label">Final Balance</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Other Sections (placeholders) -->
+      <div id="dashboard" class="section fade-in" style="display: none">
+        <div class="card card-custom">
+          <div class="card-header card-header-custom">
+            <h3 class="mb-0">
+              <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </h3>
+          </div>
+          <div class="card-body card-body-custom text-center">
+            <h4>Welcome to your Financial Dashboard</h4>
+            <p class="text-muted">
+              This section would contain your financial overview and key
+              metrics.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="reports" class="section fade-in" style="display: none">
+        <div class="card card-custom">
+          <div class="card-header card-header-custom">
+            <h3 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Reports</h3>
+          </div>
+          <div class="card-body card-body-custom text-center">
+            <h4>Financial Reports</h4>
+            <p class="text-muted">
+              This section would contain detailed financial reports and
+              analytics.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="settings" class="section fade-in" style="display: none">
+        <div class="card card-custom">
+          <div class="card-header card-header-custom">
+            <h3 class="mb-0"><i class="fas fa-cog me-2"></i>Settings</h3>
+          </div>
+          <div class="card-body card-body-custom text-center">
+            <h4>Application Settings</h4>
+            <p class="text-muted">
+              This section would contain application preferences and
+              configurations.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Global variables
+      let calculationResults = [];
+
+      // Initialize the application
+      document.addEventListener("DOMContentLoaded", function () {
+        // Set default start date to today
+        document.getElementById("startDate").valueAsDate = new Date();
+
+        // Add form submission handler
+        document
+          .getElementById("budgetForm")
+          .addEventListener("submit", calculateSinkingFund);
+      });
+
+      // Navigation function
+      function showSection(sectionId) {
+        // Hide all sections
+        const sections = document.querySelectorAll(".section");
+        sections.forEach((section) => {
+          section.style.display = "none";
+        });
+
+        // Show selected section
+        document.getElementById(sectionId).style.display = "block";
+
+        // Update active nav link
+        const navLinks = document.querySelectorAll(".nav-link");
+        navLinks.forEach((link) => {
+          link.classList.remove("active");
+        });
+        event.target.classList.add("active");
+      }
+
+      // Main calculation function
+      function calculateSinkingFund(event) {
+        event.preventDefault();
+
+        // Get form values
+        const projectCost = parseFloat(
+          document.getElementById("projectCost").value
+        );
+        const duration = parseInt(document.getElementById("duration").value);
+        const annualRate =
+          parseFloat(document.getElementById("interestRate").value) / 100;
+        const frequency = document.getElementById("frequency").value;
+        const startDate = new Date(document.getElementById("startDate").value);
+
+        // Validate inputs
+        if (
+          !validateInputs(
+            projectCost,
+            duration,
+            annualRate,
+            frequency,
+            startDate
+          )
+        ) {
+          return;
+        }
+
+        // Show loading
+        showLoading(true);
+
+        // Calculate with a small delay to show loading animation
+        setTimeout(() => {
+          try {
+            const results = performCalculation(
+              projectCost,
+              duration,
+              annualRate,
+              frequency,
+              startDate
+            );
+            displayResults(results);
+            updateCharts(results);
+            updateSummaryStats(results);
+            showLoading(false);
+          } catch (error) {
+            console.error("Calculation error:", error);
+            showAlert(
+              "An error occurred during calculation. Please check your inputs and try again.",
+              "danger"
+            );
+            showLoading(false);
+          }
+        }, 500);
+      }
+
+      // Input validation
+      function validateInputs(
+        projectCost,
+        duration,
+        annualRate,
+        frequency,
+        startDate
+      ) {
+        if (isNaN(projectCost) || projectCost <= 0) {
+          showAlert(
+            "Please enter a valid project cost greater than ₦0.",
+            "danger"
+          );
+          return false;
+        }
+
+        if (isNaN(duration) || duration <= 0) {
+          showAlert(
+            "Please enter a valid duration greater than 0 months.",
+            "danger"
+          );
+          return false;
+        }
+
+        if (isNaN(annualRate) || annualRate < 0) {
+          showAlert(
+            "Please enter a valid interest rate (0 or greater).",
+            "danger"
+          );
+          return false;
+        }
+
+        if (!frequency) {
+          showAlert("Please select a contribution frequency.", "warning");
+          return false;
+        }
+
+        if (!startDate || isNaN(startDate.getTime())) {
+          showAlert("Please select a valid start date.", "warning");
+          return false;
+        }
+
+        return true;
+      }
+
+      // Show custom alert
+      function showAlert(message, type = "info") {
+        // Remove existing alerts
+        const existingAlerts = document.querySelectorAll(".custom-alert");
+        existingAlerts.forEach((alert) => alert.remove());
+
+        const alertDiv = document.createElement("div");
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show custom-alert`;
+        alertDiv.style.cssText =
+          "position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 400px;";
+        alertDiv.innerHTML = `
+              ${message}
+              <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+          `;
+
+        document.body.appendChild(alertDiv);
+
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+          if (alertDiv.parentElement) {
+            alertDiv.remove();
+          }
+        }, 5000);
+      }
+
+      // Perform the sinking fund calculation
+      function performCalculation(
+        projectCost,
+        duration,
+        annualRate,
+        frequency,
+        startDate
+      ) {
+        const frequencyMap = {
+          monthly: 12,
+          quarterly: 4,
+          "semi-annually": 2,
+          annually: 1,
+        };
+
+        const periodsPerYear = frequencyMap[frequency];
+        const totalPeriods = duration * (periodsPerYear / 12);
+        const periodRate = annualRate / periodsPerYear;
+
+        // Calculate required periodic payment using sinking fund formula
+        let payment;
+        if (periodRate === 0) {
+          payment = projectCost / totalPeriods;
+        } else {
+          payment =
+            (projectCost * periodRate) /
+            (Math.pow(1 + periodRate, totalPeriods) - 1);
+        }
+
+        // Generate payment schedule
+        const schedule = [];
+        let balance = 0;
+        let totalContributions = 0;
+        let totalInterest = 0;
+
+        const currentDate = new Date(startDate);
+
+        for (let period = 1; period <= totalPeriods; period++) {
+          const interest = balance * periodRate;
+          balance += payment + interest;
+          totalContributions += payment;
+          totalInterest += interest;
+
+          // Calculate date for this period
+          const periodDate = new Date(currentDate);
+          const monthsToAdd = period * (12 / periodsPerYear);
+          periodDate.setMonth(startDate.getMonth() + monthsToAdd);
+
+          schedule.push({
+            period: period,
+            date: periodDate,
+            contribution: payment,
+            interest: interest,
+            balance: balance,
+          });
+        }
+
+        return {
+          schedule: schedule,
+          payment: payment,
+          totalContributions: totalContributions,
+          totalInterest: totalInterest,
+          finalBalance: balance,
+          projectCost: projectCost,
+          frequency: frequency,
+        };
+      }
+
+      // Display results in table
+      function displayResults(results) {
+        const tbody = document.getElementById("resultsTable");
+        tbody.innerHTML = "";
+
+        results.schedule.forEach((row, index) => {
+          const tr = document.createElement("tr");
+          tr.style.animationDelay = index * 0.1 + "s";
+          tr.className = "fade-in";
+          tr.innerHTML = `
+                  <td><strong>${
+                    row.period
+                  }</strong><br><small class="text-muted">${row.date.toLocaleDateString(
+            "en-US",
+            { month: "short", year: "numeric" }
+          )}</small></td>
+                  <td><span class="text-primary">${formatCurrency(
+                    row.contribution
+                  )}</span></td>
+                  <td><span class="text-success">${formatCurrency(
+                    row.interest
+                  )}</span></td>
+                  <td><strong class="text-info">${formatCurrency(
+                    row.balance
+                  )}</strong></td>
+              `;
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById("resultsSection").style.display = "block";
+        calculationResults = results;
+
+        // Show success message
+        showAlert(
+          `Calculation complete! You need to save ${formatCurrency(
+            results.payment
+          )} ${
+            results.frequency
+          } to reach your ₦${results.projectCost.toLocaleString(
+            "en-NG"
+          )} goal.`,
+          "success"
+        );
+      }
+
+      // Update summary statistics
+      function updateSummaryStats(results) {
+        document.getElementById("totalContribution").textContent =
+          formatCurrency(results.totalContributions);
+        document.getElementById("totalInterest").textContent = formatCurrency(
+          results.totalInterest
+        );
+        document.getElementById("monthlyContribution").textContent =
+          formatCurrency(results.payment);
+        document.getElementById("finalBalance").textContent = formatCurrency(
+          results.finalBalance
+        );
+
+        document.getElementById("summarySection").style.display = "block";
+
+        // Add some animation to the stats
+        const statCards = document.querySelectorAll(".stats-card");
+        statCards.forEach((card, index) => {
+          card.style.animationDelay = index * 0.2 + "s";
+          card.classList.add("fade-in");
+        });
+      }
+
+      // Update charts with calculation results
+      function updateCharts(results) {
+        updateBarChart(results);
+        updatePieChart(results);
+      }
+
+      // Update bar chart (accumulated fund over time)
+      function updateBarChart(results) {
+        const barChart = document.getElementById("barChart");
+        barChart.innerHTML = "";
+
+        const maxBalance = results.finalBalance;
+        const dataPoints = Math.min(results.schedule.length, 8); // Show max 8 bars
+        const step = Math.max(
+          1,
+          Math.floor(results.schedule.length / dataPoints)
+        );
+
+        for (let i = 0; i < results.schedule.length; i += step) {
+          const bar = document.createElement("div");
+          const height = (results.schedule[i].balance / maxBalance) * 100;
+          bar.className = "bar";
+          bar.style.setProperty("--height", height + "%");
+          bar.style.height = height + "%";
+          bar.title = `Period ${i + 1}: ${formatCurrency(
+            results.schedule[i].balance
+          )}`;
+          barChart.appendChild(bar);
+        }
+      }
+
+      // Update pie chart (budget distribution)
+      function updatePieChart(results) {
+        const totalContrib = results.totalContributions;
+        const totalInterest = results.totalInterest;
+        const target = results.projectCost;
+
+        const total = Math.max(totalContrib + totalInterest, target);
+
+        const contribPercent = (totalContrib / total) * 360;
+        const interestPercent = (totalInterest / total) * 360;
+        const remainingPercent =
+          Math.max(0, (target - (totalContrib + totalInterest)) / total) * 360;
+
+        const pieChart = document.getElementById("pieChart");
+        pieChart.style.background = `conic-gradient(
+              var(--secondary-color) 0deg ${contribPercent}deg,
+              var(--success-color) ${contribPercent}deg ${
+          contribPercent + interestPercent
+        }deg,
+              var(--warning-color) ${contribPercent + interestPercent}deg 360deg
+          )`;
+      }
+
+      // Show/hide loading spinner
+      function showLoading(show) {
+        const spinner = document.getElementById("loadingSpinner");
+        if (show) {
+          spinner.style.display = "flex";
+          document.getElementById("resultsSection").style.display = "none";
+          document.getElementById("summarySection").style.display = "none";
+        } else {
+          spinner.style.display = "none";
+        }
+      }
+
+      // Format currency for display in Nigerian Naira
+      function formatCurrency(amount) {
+        return new Intl.NumberFormat("en-NG", {
+          style: "currency",
+          currency: "NGN",
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }).format(amount);
+      }
+
+      // Format percentage for display
+      function formatPercentage(rate) {
+        return (rate * 100).toFixed(2) + "%";
+      }
+
+      // Add some sample data for demonstration
+      function loadSampleData() {
+        document.getElementById("projectCost").value = "15000000"; // 15 million Naira
+        document.getElementById("duration").value = "24";
+        document.getElementById("interestRate").value = "12.5"; // More realistic Nigerian interest rate
+        document.getElementById("frequency").value = "monthly";
+
+        // Trigger calculation
+        document
+          .getElementById("budgetForm")
+          .dispatchEvent(new Event("submit"));
+      }
+
+      // Add keyboard shortcuts
+      document.addEventListener("keydown", function (event) {
+        if (event.ctrlKey && event.key === "Enter") {
+          event.preventDefault();
+          document
+            .getElementById("budgetForm")
+            .dispatchEvent(new Event("submit"));
+        }
+      });
+
+      // Add sample data button for demo purposes
+      setTimeout(() => {
+        const cardBody = document.querySelector(".card-body-custom");
+        const sampleButton = document.createElement("button");
+        sampleButton.type = "button";
+        sampleButton.className = "btn btn-outline-secondary btn-sm mt-2";
+        sampleButton.innerHTML =
+          '<i class="fas fa-flask me-1"></i>Load Sample Data';
+        sampleButton.onclick = loadSampleData;
+        cardBody.querySelector("form").appendChild(sampleButton);
+      }, 1000);
+    </script>
+    <script src="assets/js/data.js"></script>
+  </body>
+</html>
