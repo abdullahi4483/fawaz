@@ -1,0 +1,107 @@
+/* General Report Styles */
+#report-content {
+  padding: 2rem;
+  background-color: #ffffff;
+}
+
+#report-content .stats-card {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#report-content .stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+#report-content .stats-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+#report-content .stats-label {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-top: 0.5rem;
+}
+
+#report-content .table {
+  margin-top: 2rem;
+}
+
+#report-content .table th {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Print-Specific Styles */
+@media print {
+  body,
+  #wrapper,
+  #page-content-wrapper {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 12pt;
+  }
+
+  #sidebar-wrapper,
+  #menu-toggle,
+  .navbar,
+  #printReportBtn,
+  .card-header-custom .btn {
+    display: none !important;
+  }
+
+  #page-content-wrapper {
+    padding: 0 !important;
+  }
+
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .card-header,
+  .card-body {
+    padding: 0 !important;
+  }
+
+  #report-content {
+    padding: 1cm;
+  }
+
+  .table-responsive {
+    overflow: visible;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table th,
+  .table td {
+    border: 1px solid #dee2e6 !important;
+    padding: 0.5rem;
+  }
+
+  .table th {
+    background-color: #343a40 !important;
+    color: #ffffff !important;
+    -webkit-print-color-adjust: exact; /* Chrome, Safari */
+    color-adjust: exact; /* Firefox */
+  }
+
+  .stats-card {
+    page-break-inside: avoid;
+  }
+}
